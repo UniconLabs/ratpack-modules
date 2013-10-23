@@ -92,7 +92,7 @@ subprojects {
         }
     }
 }
-maven { url "https://raw.github.com/synergian/wagon-git/releases"}
+
 repositories {
     mavenCentral()
     maven { url "https://raw.github.com/synergian/wagon-git/releases"}
