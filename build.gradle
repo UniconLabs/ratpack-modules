@@ -102,7 +102,7 @@ task wrapper(type: Wrapper) {
     gradleVersion = project."gradle.version"
 }
 
-createReleaseTag.dependsOn uploadArchives
+createReleaseTag.dependsOn subprojects.uploadArchives
 
 release {
     failOnSnapshotDependencies = false
