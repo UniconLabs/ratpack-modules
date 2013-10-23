@@ -101,3 +101,7 @@ repositories {
 task wrapper(type: Wrapper) {
     gradleVersion = project."gradle.version"
 }
+
+release {
+    failOnSnapshotDependencies = false
+}
