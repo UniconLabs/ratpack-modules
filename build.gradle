@@ -1,16 +1,25 @@
 apply plugin: 'groovy'
 apply plugin: 'maven'
+apply plugin: 'base'
+
+apply from: 'http://tellurianring.com/projects/gradle-plugins/gradle-release/apply.groovy'
 
 sourceCompatibility = 1.7
 
 subprojects {
     apply plugin: 'groovy'
     apply plugin: 'maven'
+    apply plugin: 'signing'
 
     repositories {
         maven { url "http://oss.jfrog.org/repo" }
         mavenCentral()
         maven { url "http://repository.codehaus.org" }
+        maven { url "https://raw.github.com/synergian/wagon-git/releases"}
+    }
+
+    configurations {
+        deployerJar
     }
 
     dependencies {
@@ -18,11 +27,75 @@ subprojects {
         ['ratpack-core', 'ratpack-groovy'].each {
             compile "org.ratpack-framework:${it}:${project."ratpack.version"}"
         }
+        deployerJar "ar.com.synergian:wagon-git:0.2.0"
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = "javadoc"
+        from 'build/docs/javadoc'
+    }
+
+    task sourcesJar(type: Jar) {
+        classifier = "sources"
+        from sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives jar
+        archives javadocJar
+        archives sourcesJar
+    }
+
+    signing {
+        sign configurations.archives
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment)}
+                configuration = configurations.deployerJar
+                repository(url: "https://api.bintray.com/maven/uniconlabs/maven/ratpack-modules") {
+                    authentication(userName: bintrayUsername, password: bintrayAPIKey)
+                }
+                snapshotRepository(url: "git:snapshots://git@bitbucket.org:scalding/maven-repo.git") {
+                    authentication(userName: githubUsername, password: githubPassword)
+                }
+                pom.project {
+                    name "Unicon SSL Utils"
+                    packaging "jar"
+                    description "Some utilities to make it easier to work with SSL"
+                    url "https://github.com/UniconLabs/ratpack-modules"
+
+                    scm {
+                        url "git@github.com:UniconLabs/ratpack-modules.git"
+                        connection "git@github.com:UniconLabs/ratpack-modules.git"
+                        developerConnection "git@github.com:UniconLabs/ratpack-modules.git"
+                    }
+
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            distribution 'repo'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id 'scalding'
+                            name 'Jonathan Johnson'
+                        }
+                    }
+                }
+            }
+        }
     }
 }
-
+maven { url "https://raw.github.com/synergian/wagon-git/releases"}
 repositories {
     mavenCentral()
+    maven { url "https://raw.github.com/synergian/wagon-git/releases"}
 }
 
 task wrapper(type: Wrapper) {

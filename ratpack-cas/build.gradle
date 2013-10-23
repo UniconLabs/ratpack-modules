@@ -1,0 +1,33 @@
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            pom.project {
+                name "Ratpack CAS Module"
+                packaging "jar"
+                description "A Ratpack module for CAS authentication"
+                url "https://github.com/UniconLabs/ssl-utils"
+
+                scm {
+                    url "scm:git@github.com:UniconLabs/ssl-utils.git"
+                    connection "scm:git@github.com:UniconLabs/ssl-utils.git"
+                    developerConnection "scm:git@github.com:UniconLabs/ssl-utils.git"
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'scalding'
+                        name 'Jonathan Johnson'
+                    }
+                }
+            }
+        }
+    }
+}
