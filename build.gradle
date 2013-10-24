@@ -6,7 +6,7 @@ apply from: 'http://tellurianring.com/projects/gradle-plugins/gradle-release/app
 
 sourceCompatibility = 1.7
 
-subprojects {
+configure(subprojects.findAll { name != 'ratpack-samples' }) {
     apply plugin: 'groovy'
     apply plugin: 'maven'
     apply plugin: 'signing'
@@ -15,7 +15,7 @@ subprojects {
         maven { url "http://oss.jfrog.org/repo" }
         mavenCentral()
         maven { url "http://repository.codehaus.org" }
-        maven { url "https://raw.github.com/synergian/wagon-git/releases"}
+        maven { url "https://raw.github.com/synergian/wagon-git/releases" }
     }
 
     configurations {
@@ -53,7 +53,7 @@ subprojects {
     uploadArchives {
         repositories {
             mavenDeployer {
-                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment)}
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
                 configuration = configurations.deployerJar
                 repository(url: "https://api.bintray.com/maven/uniconlabs/maven/ratpack-modules") {
                     authentication(userName: bintrayUsername, password: bintrayAPIKey)
@@ -95,7 +95,7 @@ subprojects {
 
 repositories {
     mavenCentral()
-    maven { url "https://raw.github.com/synergian/wagon-git/releases"}
+    maven { url "https://raw.github.com/synergian/wagon-git/releases" }
 }
 
 task wrapper(type: Wrapper) {

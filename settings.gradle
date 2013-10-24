@@ -1,1 +1,1 @@
-include "ratpack-cas"
+include "ratpack-cas", "ratpack-sample"
