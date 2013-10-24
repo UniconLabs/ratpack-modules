@@ -24,7 +24,3 @@ dependencies {
     springloaded "org.springsource.springloaded:springloaded-core:1.1.1"
     compile project(":ratpack-cas")
 }
-
-task wrapper(type: Wrapper) {
-    gradleVersion = "1.6"
-}
