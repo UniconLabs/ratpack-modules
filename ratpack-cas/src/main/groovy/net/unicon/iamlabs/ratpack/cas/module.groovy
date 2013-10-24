@@ -35,7 +35,11 @@ class CasHandler implements Handler {
                 return
             }
         }
-        rest.handle(context)
+        if (rest) {
+            rest.handle(context)
+        } else {
+            context.next()
+        }
     }
 }
 
